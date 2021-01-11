@@ -1,7 +1,7 @@
 "use strict";
 
 const fs = require(`fs`);
-const { getRandomInt, shuffle } = require(`../../utils`);
+const { getRandomInt, shuffleArray, getArrayRandomElement } = require(`../../utils`);
 
 const DEFAULT_COUNT = 1;
 const FILE_NAME = `mocks.json`;
@@ -46,33 +46,31 @@ const PictureRestrict = {
 
 const getPictureFileName = (num) => `item${String(num).padStart(2, `0`)}.jpg`;
 
-const getCategoryList = (length) => {
+const generateCategory = (count) => {
   const categories = [];
-  for (let i = 0; i < length; i++) {
-    let category;
-    do {
-      category = CATEGORIES[getRandomInt(0, CATEGORIES.length - 1)];
-    } while (categories.includes(category));
-    categories[i] = category;
+  const copy = CATEGORIES.slice();
+  for (let i = 0; i < count; i++) {
+    const randomIndex = getRandomInt(0, copy.length - 1);
+    categories.push(copy.splice(randomIndex, 1)[0]);
   }
   return categories;
 };
 
-const generateOffers = (count) =>
-  Array(count)
-    .fill({})
-    .map(() => ({
-      title: TITLES[getRandomInt(0, TITLES.length - 1)],
-      picture: getPictureFileName(
-        getRandomInt(PictureRestrict.MIN, PictureRestrict.MAX)
-      ),
-      description: shuffle(SENTENCES).slice(0, getRandomInt(1, 5)).join(` `),
-      type: Object.keys(OfferType)[
-        Math.floor(Math.random() * Object.keys(OfferType).length)
-      ],
-      sum: getRandomInt(SumRestrict.MIN, SumRestrict.MAX),
-      category: getCategoryList(getRandomInt(1, 3)),
-    }));
+const generateOffer = () => ({
+  title: getArrayRandomElement(TITLES),
+  picture: getPictureFileName(
+    getRandomInt(PictureRestrict.MIN, PictureRestrict.MAX)
+  ),
+  description: shuffleArray(SENTENCES).slice(0, getRandomInt(1, 5)).join(` `),
+  type: Object.keys(OfferType)[
+    Math.floor(Math.random() * Object.keys(OfferType).length)
+  ],
+  sum: getRandomInt(SumRestrict.MIN, SumRestrict.MAX),
+  category: generateCategory(getRandomInt(1, 3)),
+});
+
+const generateOffers = (count) =>  Array(count).fill({}).map(generateOffer);
+
 
 module.exports = {
   name: `--generate`,
