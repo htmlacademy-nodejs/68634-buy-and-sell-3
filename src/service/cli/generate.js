@@ -1,7 +1,7 @@
 "use strict";
 
 const fs = require(`fs`);
-const { getRandomInt, shuffleArray, getArrayRandomElement } = require(`../../utils`);
+const {getRandomInt, shuffleArray, getArrayRandomElement} = require(`../../utils`);
 
 const DEFAULT_COUNT = 1;
 const FILE_NAME = `mocks.json`;
@@ -59,7 +59,7 @@ const generateCategory = (count) => {
 const generateOffer = () => ({
   title: getArrayRandomElement(TITLES),
   picture: getPictureFileName(
-    getRandomInt(PictureRestrict.MIN, PictureRestrict.MAX)
+      getRandomInt(PictureRestrict.MIN, PictureRestrict.MAX)
   ),
   description: shuffleArray(SENTENCES).slice(0, getRandomInt(1, 5)).join(` `),
   type: Object.keys(OfferType)[
@@ -69,7 +69,7 @@ const generateOffer = () => ({
   category: generateCategory(getRandomInt(1, 3)),
 });
 
-const generateOffers = (count) =>  Array(count).fill({}).map(generateOffer);
+const generateOffers = (count) => Array(count).fill({}).map(generateOffer);
 
 
 module.exports = {
