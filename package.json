@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/filatow/68634-buy-and-sell-3#readme",
   "devDependencies": {
-    "eslint": "7.17.0",
-    "eslint-config-htmlacademy": "0.6.0"
+    "eslint": "7.21.0",
+    "eslint-config-htmlacademy": "2.1.0"
   }
 }
