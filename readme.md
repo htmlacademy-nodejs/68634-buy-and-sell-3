@@ -1,7 +1,7 @@
 # Учебный проект «Куплю. Продам» [![Build status][travis-image]][travis-url]
 
 - Студент: [Евгений Филатов](https://up.htmlacademy.ru/nodejs/3/user/68634).
-- Наставник: [Сергей Рожков](https://htmlacademy.ru/profile/id1069033).
+- Наставник: [Алексей Пушников](https://htmlacademy.ru/profile/id476723).
 
 ---
 
