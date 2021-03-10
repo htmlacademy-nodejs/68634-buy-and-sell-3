@@ -1,7 +1,8 @@
 "use strict";
 
-const fs = require(`fs`);
-const { getRandomInt, shuffleArray, getArrayRandomElement } = require(`../../utils`);
+const fs = require(`fs`).promises;
+const chalk = require(`chalk`);
+const {getRandomInt, shuffleArray, getArrayRandomElement} = require(`../../utils`);
 
 const DEFAULT_COUNT = 1;
 const FILE_NAME = `mocks.json`;
@@ -59,7 +60,7 @@ const generateCategory = (count) => {
 const generateOffer = () => ({
   title: getArrayRandomElement(TITLES),
   picture: getPictureFileName(
-    getRandomInt(PictureRestrict.MIN, PictureRestrict.MAX)
+      getRandomInt(PictureRestrict.MIN, PictureRestrict.MAX)
   ),
   description: shuffleArray(SENTENCES).slice(0, getRandomInt(1, 5)).join(` `),
   type: Object.keys(OfferType)[
@@ -69,23 +70,23 @@ const generateOffer = () => ({
   category: generateCategory(getRandomInt(1, 3)),
 });
 
-const generateOffers = (count) =>  Array(count).fill({}).map(generateOffer);
+const generateOffers = (count) => Array(count).fill({}).map(generateOffer);
 
 
 module.exports = {
   name: `--generate`,
-  run(args) {
+  async run(args) {
     const [count] = args;
     const countOffer = Number.parseInt(count, 10) || DEFAULT_COUNT;
     const content = JSON.stringify(generateOffers(countOffer));
 
-    fs.writeFile(FILE_NAME, content, (err) => {
-      if (err) {
-        console.error(`Не удалось записать данные в файл...`);
-        process.exit(1);
-      }
-      console.info(`Операция выполнена. Файл создан.`);
+    try {
+      await fs.writeFile(FILE_NAME, content);
+      console.info(chalk.green(`Операция выполнена. Файл создан.`));
       process.exit(0);
-    });
+    } catch (err) {
+      console.error(chalk.red(`Не удалось записать данные в файл...`));
+      process.exit(1);
+    }
   },
 };
