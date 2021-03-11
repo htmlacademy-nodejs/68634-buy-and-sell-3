@@ -24,23 +24,22 @@ const PictureRestrict = {
   MAX: 16,
 };
 
-const FILE_TITLES_PATH = `../../data/titles.txt`;
-const FILE_SENTENCES_PATH = `../../data/sentences.txt`;
-const FILE_CATEGORIES_PATH = `../../data/categories.txt`;
+const FILE_TITLES_PATH = `./data/titles.txt`;
+const FILE_SENTENCES_PATH = `./data/sentences.txt`;
+const FILE_CATEGORIES_PATH = `./data/categories.txt`;
 
 const readContent = async (filePath) => {
   try {
     const content = await fs.readFile(filePath, `utf-8`);
     return content.split(`\n`);
   } catch (err) {
-    console.error(chalk.red(err));
-    return [];
+    throw new Error(`Отсутствует файл или папка по пути: '${err.path}'`);
   }
 };
 
 const getPictureFileName = (num) => `item${String(num).padStart(2, `0`)}.jpg`;
 
-const generateCategory = async (count, allCategories) => {
+const generateCategory = (count, allCategories) => {
   const categories = [];
   const copy = allCategories.slice();
   for (let i = 0; i < count; i++) {
@@ -71,11 +70,17 @@ const generateOffers = (count, mocks) => (
 module.exports = {
   name: `--generate`,
   async run(args) {
-    const mocks = {
-      titles: await readContent(FILE_TITLES_PATH),
-      categories: await readContent(FILE_CATEGORIES_PATH),
-      sentences: await readContent(FILE_SENTENCES_PATH)
-    };
+    let mocks = null;
+    try {
+      mocks = {
+        titles: await readContent(FILE_TITLES_PATH),
+        categories: await readContent(FILE_CATEGORIES_PATH),
+        sentences: await readContent(FILE_SENTENCES_PATH)
+      };
+    } catch (err) {
+      console.error(chalk.red(err.message));
+      process.exit(ExitCode.fail);
+    }
 
     const [count] = args;
     let offerCount = Number.parseInt(count, 10) || DEFAULT_COUNT;
