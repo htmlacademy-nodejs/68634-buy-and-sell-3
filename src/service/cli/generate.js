@@ -1,6 +1,7 @@
 "use strict";
 
 const fs = require(`fs`).promises;
+const path = require(`path`);
 const chalk = require(`chalk`);
 const {getRandomInt, shuffleArray, getArrayRandomElement} = require(`../../utils`);
 const {ExitCode} = require(`../../constants`);
@@ -24,9 +25,9 @@ const PictureRestrict = {
   MAX: 16,
 };
 
-const FILE_TITLES_PATH = `./data/titles.txt`;
-const FILE_SENTENCES_PATH = `./data/sentences.txt`;
-const FILE_CATEGORIES_PATH = `./data/categories.txt`;
+const FILE_TITLES_PATH = path.join(__dirname, `../../../data/titles.txt`);
+const FILE_SENTENCES_PATH = path.join(__dirname, `../../../data/sentences.txt`);
+const FILE_CATEGORIES_PATH = path.join(__dirname, `../../../data/categories.txt`);
 
 const readContent = async (filePath) => {
   try {
