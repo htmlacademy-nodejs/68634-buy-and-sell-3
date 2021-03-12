@@ -28,8 +28,6 @@ const sendResponse = (res, statusCode, message) => {
 };
 
 const onClientConnect = async (req, res) => {
-  // console.log(`🖨️ :: onClientConnect :: res`, res);
-  // console.log(`🖨️ :: onClientConnect :: req`, req);
   const notFoundMessageText = `Not found`;
 
   switch (req.url) {
