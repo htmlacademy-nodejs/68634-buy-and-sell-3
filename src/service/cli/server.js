@@ -4,7 +4,6 @@ const fs = require(`fs`).promises;
 const express = require(`express`);
 const {Router} = require(`express`);
 const path = require(`path`);
-// const {HttpCode} = require(`../../constants`);
 
 const DEFAULT_PORT = 3000;
 const FILENAME = path.join(__dirname, `../../../mocks.json`);
@@ -28,11 +27,7 @@ module.exports = {
 
         res.json(mocks);
       } catch (err) {
-        // код в соответствии с заданием
         res.send([]);
-
-        // код из учебника, глава с разбором ДЗ (глава 3.12)
-        // res.status(HttpCode.INTERNAL_SERVER_ERROR).send(err);
       }
     });
 
