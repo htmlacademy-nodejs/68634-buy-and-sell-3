@@ -3,6 +3,7 @@
 module.exports = {
   DEFAULT_COMMAND: `--help`,
   USER_ARGV_INDEX: 2,
+  MAX_ID_LENGTH: 6,
   ExitCode: {
     success: 0,
     fail: 1
