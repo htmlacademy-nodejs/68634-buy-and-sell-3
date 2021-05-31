@@ -1,0 +1,55 @@
+GET http://localhost:3000/api/offers HTTP/1.1
+
+###
+
+POST http://localhost:3000/api/offers HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Куплю кондей",
+    "picture": "item01.jpg",
+    "description": "Большая срочность!",
+    "type": "SALE",
+    "sum": "44444",
+    "category": ["Посуда"]
+}
+
+###
+
+PUT http://localhost:3000/api/offers/1asXkG HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Куплю Корабель",
+    "picture": "item111.jpg",
+    "description": "По морю под парусом ходить хочу!",
+    "type": "SALE",
+    "sum": "99000000",
+    "category": ["Посуда"]
+}
+
+###
+
+DELETE http://localhost:3000/api/offers/V2dcQ4 HTTP/1.1
+
+###
+
+GET http://localhost:3000/api/offers/cXa8Fa/comments HTTP/1.1
+
+###
+
+POST  http://localhost:3000/api/offers/cXa8Fa/comments HTTP/1.1
+content-type: application/json
+
+{
+  "text": "Тестовый комментарий"
+}
+
+###
+
+DELETE  http://localhost:3000/api/offers/cXa8Fa/comments/u1j2F_ HTTP/1.1
+
+
+###
+
+GET http://localhost:3000/api/search?query=да HTTP/1.1
