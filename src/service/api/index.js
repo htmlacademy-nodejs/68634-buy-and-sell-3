@@ -15,7 +15,12 @@ const {
 const app = new Router();
 
 (async () => {
-  const mockData = await getMockData();
+  const mockData = [];
+  try {
+    mockData = await getMockData();
+  } catch (err) {
+    console.log(err.message);
+  }
 
   offer(app, new OfferService(mockData), new CommentService());
   category(app, new CategoryService(mockData));
