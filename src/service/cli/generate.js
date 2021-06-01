@@ -3,12 +3,14 @@
 const fs = require(`fs`).promises;
 const path = require(`path`);
 const chalk = require(`chalk`);
+const {nanoid} = require(`nanoid`);
 const {getRandomInt, shuffleArray, getArrayRandomElement} = require(`../../utils`);
-const {ExitCode} = require(`../../constants`);
+const {ExitCode, MAX_ID_LENGTH} = require(`../../constants`);
 
 const DEFAULT_COUNT = 1;
 const MAX_COUNT = 1000;
 const FILE_NAME = `mocks.json`;
+const MAX_COMMENTS = 4;
 
 const OfferType = {
   OFFER: `offer`,
@@ -28,6 +30,7 @@ const PictureRestrict = {
 const FILE_TITLES_PATH = path.join(__dirname, `../../../data/titles.txt`);
 const FILE_SENTENCES_PATH = path.join(__dirname, `../../../data/sentences.txt`);
 const FILE_CATEGORIES_PATH = path.join(__dirname, `../../../data/categories.txt`);
+const FILE_COMMENTS_PATH = path.join(__dirname, `../../../data/comments.txt`);
 
 const readContent = async (filePath) => {
   try {
@@ -50,7 +53,16 @@ const generateCategory = (count, allCategories) => {
   return categories;
 };
 
-const generateOffer = ({titles, sentences, categories}) => ({
+const generateComments = (count, allComments) => (
+  Array(count).fill({}).map(() => ({
+    id: nanoid(MAX_ID_LENGTH),
+    text: shuffleArray(allComments)
+      .slice(0, getRandomInt(1, 3))
+      .join(` `),
+  }))
+);
+
+const generateOffer = ({titles, sentences, categories, comments}) => ({
   title: getArrayRandomElement(titles),
   picture: getPictureFileName(
       getRandomInt(PictureRestrict.MIN, PictureRestrict.MAX)
@@ -60,7 +72,9 @@ const generateOffer = ({titles, sentences, categories}) => ({
     Math.floor(Math.random() * Object.keys(OfferType).length)
   ],
   sum: getRandomInt(SumRestrict.MIN, SumRestrict.MAX),
+  id: nanoid(MAX_ID_LENGTH),
   category: generateCategory(getRandomInt(1, 3), categories),
+  comments: generateComments(getRandomInt(1, MAX_COMMENTS), comments),
 });
 
 const generateOffers = (count, mocks) => (
@@ -76,7 +90,8 @@ module.exports = {
       mocks = {
         titles: await readContent(FILE_TITLES_PATH),
         categories: await readContent(FILE_CATEGORIES_PATH),
-        sentences: await readContent(FILE_SENTENCES_PATH)
+        sentences: await readContent(FILE_SENTENCES_PATH),
+        comments: await readContent(FILE_COMMENTS_PATH),
       };
     } catch (err) {
       console.error(chalk.red(err.message));
