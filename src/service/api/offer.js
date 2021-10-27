@@ -1,14 +1,17 @@
 "use strict";
 
-const {Router} = require(`express`);
+// const {Router} = require(`express`);
 const {HttpCode} = require(`../../constants`);
 const offerValidator = require(`../middlewares/offer-validator`);
 const commentValidator = require(`../middlewares/comment-validator`);
 const offerExist = require(`../middlewares/offer-exist`);
 
-const route = new Router();
+// const route = new Router();
 
 module.exports = (app, offerService, commentService) => {
+  const {Router} = require(`express`);
+  const route = new Router();
+
   app.use(`/offers`, route);
 
   route.get(`/`, (req, res) => {
@@ -43,7 +46,7 @@ module.exports = (app, offerService, commentService) => {
         .json(offer);
   });
 
-  route.put(`/:offerId`, (req, res) => {
+  route.put(`/:offerId`, offerValidator, (req, res) => {
     const {offerId} = req.params;
     let offer = offerService.findOne(offerId);
 
@@ -67,7 +70,8 @@ module.exports = (app, offerService, commentService) => {
         .send(`Offer with id="${offerId}" wasn't found`);
     }
 
-    return res.sendStatus(HttpCode.NO_CONTENT);
+    return res.status(HttpCode.OK)
+      .json(deletedOffer);
   });
 
   route.get(`/:offerId/comments`, offerExist(offerService), (req, res) => {
@@ -83,18 +87,21 @@ module.exports = (app, offerService, commentService) => {
 
     commentService.create(offer, comment);
 
-    return res.sendStatus(HttpCode.CREATED);
+    return res.status(HttpCode.CREATED)
+      .send(comment);
   });
 
   route.delete(`/:offerId/comments/:commentId`, offerExist(offerService), (req, res) => {
     const {offer} = res.locals;
     const {commentId} = req.params;
+    const deletedComment = commentService.drop(offer, commentId);
 
-    if (!commentService.drop(offer, commentId)) {
+    if (!deletedComment) {
       return res.status(HttpCode.NOT_FOUND)
         .send(`There is no such comment in base`);
     }
 
-    return res.sendStatus(HttpCode.NO_CONTENT);
+    return res.status(HttpCode.OK)
+    .json(deletedComment);
   });
 };
