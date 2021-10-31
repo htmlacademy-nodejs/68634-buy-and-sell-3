@@ -17,5 +17,9 @@ module.exports = {
     NOT_FOUND: 404,
     FORBIDDEN: 403,
     INTERNAL_SERVER_ERROR: 500,
+  },
+  Env: {
+    DEVELOPMENT: `development`,
+    PRODUCTION: `production`
   }
 };
