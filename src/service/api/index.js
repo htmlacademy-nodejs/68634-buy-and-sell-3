@@ -15,7 +15,7 @@ const {
 const app = new Router();
 
 (async () => {
-  const mockData = [];
+  let mockData = [];
   try {
     mockData = await getMockData();
   } catch (err) {

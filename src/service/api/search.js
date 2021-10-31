@@ -10,6 +10,10 @@ module.exports = (app, searchService) => {
   app.use(`/search`, route);
 
   route.get(`/`, (req, res) => {
+    if (!req.query.query) {
+      return res.status(HttpCode.BAD_REQUEST)
+        .send(`Search query was not found`);
+    }
 
     const suitableOffers = searchService.findAll(req.query.query);
 

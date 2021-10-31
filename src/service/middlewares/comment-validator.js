@@ -7,9 +7,9 @@ const commentKeys = [`text`];
 module.exports = (req, res, next) => {
   const newComment = req.body;
   const keys = Object.keys(newComment);
-  const keysExists = commentKeys.every((key) => keys.includes(key));
+  const keysExist = commentKeys.every((key) => keys.includes(key));
 
-  if (!keysExists) {
+  if (!keysExist) {
     res.status(HttpCode.BAD_REQUEST)
       .send(`Bad request`);
   }
